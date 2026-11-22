@@ -1,0 +1,64 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: rentok
+      POSTGRES_USER: rentok
+      POSTGRES_PASSWORD: rentok_dev_only_change_me
+    ports:
+      - "5433:5432"
+    volumes:
+      - rentok-postgres:/var/lib/postgresql/data
+      - ./docker/postgres-init.sql:/docker-entrypoint-initdb.d/01-create-test-db.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U rentok -d rentok"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://rentok:rentok_dev_only_change_me@db:5432/rentok?schema=public
+      PORT: 4000
+      ADMIN_API_KEY: ${ADMIN_API_KEY:-local-admin-dev-only-change-this-token}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OPENAI_BASE_URL: ${OPENAI_BASE_URL:-https://api.openai.com/v1}
+      WEB_ORIGIN: http://localhost:5175
+    ports:
+      - "4001:4000"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    restart: unless-stopped
+    ports:
+      - "5175:4173"
+    depends_on:
+      - api
+
+  integration:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    profiles: ["test"]
+    environment:
+      DATABASE_URL: postgresql://rentok:rentok_dev_only_change_me@db:5432/rentok_test?schema=public
+      ADMIN_API_KEY: local-test-admin-token
+      OPENAI_API_KEY: ""
+      PORT: 4100
+    command: ["sh", "-c", "pnpm --filter @rentok/api db:deploy && pnpm --filter @rentok/api test"]
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  rentok-postgres:

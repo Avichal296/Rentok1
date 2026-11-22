@@ -1,0 +1,43 @@
+RentOk-Gateway/
+├── .dockerignore
+├── .env.example
+├── .gitignore
+├── AI-LOG.md
+├── DECISIONS.md
+├── FOLDER-STRUCTURE.txt
+├── README.md
+├── apps/
+│   ├── api/
+│   │   ├── .env.example
+│   │   ├── Dockerfile
+│   │   ├── package.json
+│   │   ├── prisma/
+│   │   │   ├── migrations/
+│   │   │   │   ├── 202611220001_init/
+│   │   │   │   │   └── migration.sql
+│   │   │   │   └── migration_lock.toml
+│   │   │   ├── schema.prisma
+│   │   │   └── seed.ts
+│   │   ├── src/
+│   │   │   └── index.ts
+│   │   ├── test/
+│   │   │   └── gateway.test.ts
+│   │   └── tsconfig.json
+│   └── web/
+│       ├── Dockerfile
+│       ├── index.html
+│       ├── package.json
+│       ├── postcss.config.js
+│       ├── src/
+│       │   ├── main.tsx
+│       │   └── style.css
+│       ├── tailwind.config.js
+│       ├── tsconfig.json
+│       └── vite.config.ts
+├── docker-compose.yml
+├── docker/
+│   └── postgres-init.sql
+├── package.json
+├── pnpm-lock.yaml
+├── pnpm-workspace.yaml
+└── turbo.json

@@ -1,0 +1,19 @@
+{
+  "name": "rentok-llm-gateway",
+  "private": true,
+  "packageManager": "pnpm@9.15.0",
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "test": "pnpm --filter @rentok/api test",
+    "docker:up": "docker compose up --build -d",
+    "docker:down": "docker compose down",
+    "dev:web": "pnpm --filter @rentok/web dev --host 0.0.0.0",
+    "dev:api": "pnpm --filter @rentok/api dev",
+    "db:generate": "pnpm --filter @rentok/api db:generate",
+    "db:migrate": "pnpm --filter @rentok/api db:migrate",
+    "db:deploy": "pnpm --filter @rentok/api db:deploy",
+    "db:seed": "pnpm --filter @rentok/api db:seed"
+  },
+  "devDependencies": { "turbo": "^2.3.3" }
+}
