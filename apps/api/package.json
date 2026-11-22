@@ -4,7 +4,7 @@
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "start": "node dist/src/index.js",
-    "build": "tsc -p tsconfig.json",
+    "build": "prisma generate --schema=prisma/schema.prisma && tsc -p tsconfig.json",
     "test": "NODE_ENV=test tsx --test test/*.test.ts",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",

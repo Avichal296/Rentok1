@@ -1,7 +1,31 @@
+
 {
-  "$schema": "https://turbo.build/schema.json",
+  "$schema": "https://turborepo.dev/schema.json",
+  "globalPassThroughEnv": [
+    "DATABASE_URL",
+    "PORT",
+    "ADMIN_API_KEY",
+    "OPENAI_API_KEY",
+    "OPENAI_BASE_URL",
+    "WEB_ORIGIN"
+  ],
   "tasks": {
-    "build": { "dependsOn": ["^build"], "outputs": ["dist/**"] },
-    "dev": { "cache": false, "persistent": true }
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**"],
+      "passThroughEnv": [
+        "DATABASE_URL",
+        "PORT",
+        "ADMIN_API_KEY",
+        "OPENAI_API_KEY",
+        "OPENAI_BASE_URL",
+        "WEB_ORIGIN"
+      ]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    }
   }
 }
+

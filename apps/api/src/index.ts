@@ -2,7 +2,7 @@ import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
-import { Prisma, PrismaClient } from '@prisma/client';
+import { PrismaClient, Prisma } from '@prisma/client';
 import { createHash, randomBytes, timingSafeEqual } from 'node:crypto';
 import { z } from 'zod';
 
@@ -113,7 +113,10 @@ app.post('/v1/chat/completions', async (req, res, next) => {
 
 app.use((err: unknown, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
   console.error(err instanceof Error ? err.message : 'Unknown error');
-  if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === 'P2021') return res.status(503).json({ error: { message: 'Database is not initialized. Run the Prisma migration first.' } });
+  if (
+    err instanceof Prisma.PrismaClientKnownRequestError &&
+    err.code === 'P2021'
+  ) return res.status(503).json({ error: { message: 'Database is not initialized. Run the Prisma migration first.' } });
   res.status(500).json({ error: { message: 'Gateway could not complete the request.' } });
 });
 
